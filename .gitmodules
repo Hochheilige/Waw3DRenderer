@@ -1,0 +1,3 @@
+[submodule "external/WinAPIWrapper"]
+	path = external/WinAPIWrapper
+	url = https://github.com/Hochheilige/WinAPIWrapper.git
