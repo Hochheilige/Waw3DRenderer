@@ -10,8 +10,10 @@
 #include <future>
 #include <mutex>
 
+//#include "src/WawMath.h"
 
 using namespace Waw;
+//using namespace WawM;
 
 class FPS {
 public:
@@ -127,7 +129,6 @@ void DrawTriangle(HDC hdc, const Point& p1, const Point& p2, const Point& p3, St
 	//DeleteObject(pen);
 }
 
-HINSTANCE hInst;
 HDC memoryDC;
 HBITMAP bitmap;
 Triangle tr;
@@ -135,53 +136,42 @@ mesh meshCube;
 Color color;
 vec3d vCamera;
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
 std::chrono::steady_clock::time_point begin;
 std::chrono::steady_clock::time_point end;
 float fTheta;
 
 FPS fps;
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
+LRESULT WINAPI WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine, int nCmdShow) {
 	begin = std::chrono::steady_clock::now();
 
 	// Load files
-	meshCube.LoadObjFile("models/ship.obj");
-	//meshCube.LoadObjFile("models/MandoHelmetTri.obj");
+	//meshCube.LoadObjFile("models/ship.obj");
+	meshCube.LoadObjFile("models/MandoHelmetTri.obj");
 	//meshCube.LoadObjFile("models/Venator.obj"); // Looks unreal
 
 	// Create window
-	hInst = hInstance;
-	Window window(hInst, nCmdShow, WndProc);
+	Window window(hInstance, WinProc);
+	window.CreateWawWindow(hInstance, nCmdShow, 800, 600, "Waw3DRenderer");
 	color = Color(0, 255, 177);
 	//tr.SetContourColor(StandartColors::BLACK);
 	//tr.SetFillColor(StandartColors::RED);
 	//tr.SetColor(color);
 
-	RECT rect = { 0 };
-	GetWindowRect(window.GetWindow(), &rect);
-	RECT fpsPos = { 0 };
-	fpsPos.left = 0;
-	fpsPos.top = 0;
-	fpsPos.right = 0.15f * rect.right;
-	fpsPos.bottom = 0.15f * rect.bottom;
-
-	HACCEL hAccelTable = LoadAccelerators(hInst, MAKEINTRESOURCE(IDC_WAW));
 	MSG msg;
 
 	fps.Init();
 	while (GetMessage(&msg, nullptr, 0, 0)) {
-		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) {
-			end = std::chrono::steady_clock::now();
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
+		end = std::chrono::steady_clock::now();
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 		InvalidateRect(window.GetWindow(), NULL, TRUE);
 	}
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT WINAPI WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	RECT rect = { 0 };
 	GetWindowRect(hWnd, &rect);
 	int32_t width = rect.right - rect.left;
@@ -236,20 +226,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 	std::vector<triangle> vecTrianglesToRaster;
 
 	switch (message) {
-		case WM_COMMAND:
-		{
-			int wmId = LOWORD(wParam);
-			switch (wmId) {
-				case IDM_ABOUT:
-					DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, NULL);
-					break;
-				case IDM_EXIT:
-					DestroyWindow(hWnd);
-					break;
-				default:
-					return DefWindowProc(hWnd, message, wParam, lParam);
-			}
-		} break;
 		case WM_PAINT:
 		{
 			PAINTSTRUCT ps;
@@ -291,9 +267,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 
 				for (int i = 0; i < 3; ++i)
 					MultiplyMatrixVector(tri.p[i], triRotatedZ.p[i], matRotZ);
-
-				//for (int i = 0; i < 3; ++i)
-				//	MultiplyMatrixVector(tri.p[i], triRotatedZX.p[i], matRotX);
 
 				for (int i = 0; i < 3; ++i)
 					MultiplyMatrixVector(triRotatedZ.p[i], triRotatedZX.p[i], matRotX);
