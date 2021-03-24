@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-option(MANDO_HELMET "Build example with rounded Mando helmet" OFF)
+option(MANDO_HELMET "Build example with rounded Mando helmet" ON)
 option(SPACESHIP "Build example with rounded Spaceship" OFF)
 set(BUILD_AS_STATIC_LIB ON)
 

@@ -38,8 +38,6 @@ int TriangleClipAgainstPlane(vec3d plane_p, vec3d plane_n, MathTriangle& in_tri,
 LRESULT WINAPI WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine, int nCmdShow) {
-	
-
 	// Load files
 	meshCube.LoadObjFile("models/axis.obj");
 
@@ -66,6 +64,7 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
 	std::chrono::duration<float> elapsed;
 
+	// Projection matrix
 	float Near = 0.1f;
 	float Far = 1000.f;
 	float fieldOfView = 90.0f;

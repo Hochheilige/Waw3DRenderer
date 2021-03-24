@@ -148,9 +148,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine
 	begin = std::chrono::steady_clock::now();
 
 	// Load files
-	meshCube.LoadObjFile("models/ship.obj");
-	//meshCube.LoadObjFile("models/MandoHelmetTri.obj");
-	//meshCube.LoadObjFile("models/Venator.obj"); // Looks unreal
+	meshCube.LoadObjFile("../models/ship.obj");
 
 	// Create window
 	Window window(hInstance, WinProc);
