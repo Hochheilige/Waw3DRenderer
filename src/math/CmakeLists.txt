@@ -1,0 +1,20 @@
+list(
+    APPEND math
+    mat4x4.cpp mat4x4.h
+    Triangle.h
+    vec3d.cpp vec3d.h 
+    WawMath.h
+)
+
+message("-- build math source files")
+add_library(mathLib STATIC ${math})
+
+target_include_directories(mathLib
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../external/WinAPIWrapper/include/ 
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../external/WinAPIWrapper/src/ 
+)
+
+target_link_directories(mathLib
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../external/WinAPIWrapper/include/ 
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../../external/WinAPIWrapper/src/ 
+)

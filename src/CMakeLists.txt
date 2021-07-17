@@ -1,22 +1,22 @@
 list(
-    APPEND WawMathSrc
+    APPEND src
     FPS.cpp FPS.h
-    mat4x4.cpp mat4x4.h
-    MathTriangle.h
     Mesh.cpp Mesh.h 
-    vec3d.cpp vec3d.h 
-    WawMath.h
 )
+
+add_subdirectory(math)
 
 message("-- build source files")
-add_library(WawMathSources STATIC ${WawMathSrc})
+add_library(sources STATIC ${src})
 
-target_include_directories(WawMathSources
+target_include_directories(sources
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../external/WinAPIWrapper/include/ 
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../external/WinAPIWrapper/src/ 
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/math/ 
 )
 
-target_link_directories(WawMathSources
+target_link_directories(sources
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../external/WinAPIWrapper/include/ 
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../external/WinAPIWrapper/src/ 
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/math/
 )

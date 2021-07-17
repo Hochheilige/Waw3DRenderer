@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-namespace WawM {
+namespace WawMath {
 
 	class vec3d {
 	public:

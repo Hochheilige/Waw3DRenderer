@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-option(MANDO_HELMET "Build example with rounded Mando helmet" ON)
+option(MANDO_HELMET "Build example with rounded Mando helmet" OFF)
 option(SPACESHIP "Build example with rounded Spaceship" OFF)
 set(BUILD_AS_STATIC_LIB ON)
 
@@ -32,8 +32,6 @@ else()
     )
 endif()
 
-
-
-target_link_libraries(${PROJECT_NAME} WinAPIWrapper WawMathSources)
+target_link_libraries(${PROJECT_NAME} WinAPIWrapper mathLib sources)
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)

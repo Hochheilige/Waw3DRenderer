@@ -128,7 +128,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine
 	begin = std::chrono::steady_clock::now();
 
 	// Load files
-	meshCube.LoadObjFile("../models/MandoHelmetTri.obj");
+	meshCube.LoadObjFile("../../models/MandoHelmetTri.obj");
 
 	// Create window
 	Window window(hInstance, WinProc);

@@ -2,10 +2,9 @@
 
 #include "vec3d.h"
 
-namespace WawM {
+namespace WawMath {
 
 	struct mat4x4 {
-
 		float m[4][4] = { 0 };
 	};
 

@@ -8,7 +8,9 @@
 #include <sstream>
 #include <string>
 
-#include "src/WawMath.h"
+#include "src/math/WawMath.h"
+#include "src/FPS.h"
+#include "src/Mesh.h"
 
 #define VK_A 0x41
 #define VK_D 0x44
@@ -16,11 +18,11 @@
 #define VK_S 0x53
 
 using namespace Waw;
-using namespace WawM;
+using namespace WawMath;
 
 HDC memoryDC;
 HBITMAP bitmap;
-Triangle tr;
+Waw::Triangle tr;
 Mesh meshCube;
 Color color;
 vec3d camera;
@@ -34,7 +36,7 @@ float yaw = 0.0f;
 
 FPS fps;
 
-int TriangleClipAgainstPlane(vec3d plane_p, vec3d plane_n, MathTriangle& in_tri, MathTriangle& out_tri1, MathTriangle& out_tri2);
+int TriangleClipAgainstPlane(vec3d plane_p, vec3d plane_n, WawMath::Triangle& in_tri, WawMath::Triangle& out_tri1, WawMath::Triangle& out_tri2);
 LRESULT WINAPI WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine, int nCmdShow) {
@@ -73,7 +75,7 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	mat4x4 projectionMatrix = MakeProjection(fieldOfView, aspectRatio, Near, Far);
 
 	// Store triagles for rastering later
-	std::vector<MathTriangle> vecTrianglesToRaster;
+	std::vector<WawMath::Triangle> vecTrianglesToRaster;
 
 	switch (message) {
 		case WM_PAINT:
@@ -108,7 +110,7 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 			mat4x4 viewMatrix = QuickInverse(matrixCamera);
 
 			for (const auto& tri : meshCube.tris) {
-				MathTriangle triProjected, triTransformed, triViewed;
+				WawMath::Triangle triProjected, triTransformed, triViewed;
 
 				triProjected.color = color;
 
@@ -146,7 +148,7 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 						triViewed.p[i] = viewMatrix * triTransformed.p[i];
 
 					int clippedTriangles = 0;
-					MathTriangle clipped[2];
+					WawMath::Triangle clipped[2];
 					clippedTriangles = TriangleClipAgainstPlane({ 0.0f, 0.0f, 0.1f }, { 0.0f, 0.0f, 1.0f }, triViewed, clipped[0], clipped[1]);
 
 					for (int n = 0; n < clippedTriangles; ++n) {
@@ -175,7 +177,7 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 			}
 
 			// Sort triangles from back to front
-			std::sort(vecTrianglesToRaster.begin(), vecTrianglesToRaster.end(), [](const MathTriangle& t1, const MathTriangle& t2) {
+			std::sort(vecTrianglesToRaster.begin(), vecTrianglesToRaster.end(), [](const WawMath::Triangle& t1, const WawMath::Triangle& t2) {
 				float z1 = (t1.p[0].z + t1.p[1].z + t1.p[2].z) / 3.0f; // midpoint of z 
 				float z2 = (t2.p[0].z + t2.p[1].z + t2.p[2].z) / 3.0f;
 				return z1 < z2;
@@ -264,7 +266,7 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	return 0;
 }
 
-int TriangleClipAgainstPlane(vec3d plane_p, vec3d plane_n, MathTriangle& in_tri, MathTriangle& out_tri1, MathTriangle& out_tri2) {
+int TriangleClipAgainstPlane(vec3d plane_p, vec3d plane_n, WawMath::Triangle& in_tri, WawMath::Triangle& out_tri1, WawMath::Triangle& out_tri2) {
 	plane_n.Normalise();
 
 	auto dist = [&](vec3d& p) {
@@ -315,4 +317,6 @@ int TriangleClipAgainstPlane(vec3d plane_p, vec3d plane_n, MathTriangle& in_tri,
 		out_tri2.p[2] = IntersectPlane(plane_p, plane_n, *inside_points[1], *outside_points[0]);
 		return 2; 
 	}
+
+	return 0;
 }

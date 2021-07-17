@@ -5,9 +5,9 @@ bool Mesh::LoadObjFile(std::string file_name) {
 	ifstream file(file_name);
 	if (!file) return false;
 
-	vector<WawM::vec3d> verts;
+	vector<WawMath::vec3d> verts;
 	string line;
-	WawM::vec3d v;
+	WawMath::vec3d v;
 	int f[3];
 	while (file) {
 		getline(file, line);

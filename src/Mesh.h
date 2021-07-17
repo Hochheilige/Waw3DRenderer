@@ -6,11 +6,11 @@
 #include <sstream>
 #include <fstream>
 
-#include "vec3d.h"
-#include "MathTriangle.h"
+#include "math/vec3d.h"
+#include "math/Triangle.h"
 
 struct Mesh {
-	std::vector<MathTriangle> tris;
+	std::vector<WawMath::Triangle> tris;
 
 	bool LoadObjFile(std::string file_name);
 };

@@ -1,6 +1,6 @@
 #include "mat4x4.h"
 
-namespace WawM {
+namespace WawMath {
 
 	mat4x4 MakeIdentity() {
 		mat4x4 matrix;
